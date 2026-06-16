@@ -1,30 +1,37 @@
 package com.blackwell.cosmosportalsliveview;
 
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.IModLoadingState;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.javafxmod.FXModLauncher;
 
 import com.blackwell.cosmosportalsliveview.config.PortalLiveViewConfig;
 import com.blackwell.cosmosportalsliveview.client.PortalLiveViewClientSetup;
+
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 @Mod(CosmosPortalsLiveView.MOD_ID)
 public class CosmosPortalsLiveView {
     
     public static final String MOD_ID = "cosmosportals_liveview";
     
-    public CosmosPortalsLiveView(ModContainer container, IEventBus bus) {
-        container.registerConfig(ModConfig.Type.CLIENT, PortalLiveViewConfig.SPEC, "cosmosportals-liveview-client.toml");
+    public CosmosPortalsLiveView() {
+        IEventBus modEventBus = ModLoadingContext.getInstance().getModEventBus();
+        ModLoadingContext.getInstance().registerConfig(ModConfig.Type.CLIENT, PortalLiveViewConfig.SPEC, "cosmosportals-liveview-client.toml");
         
-        bus.addListener(this::onFMLCommonSetup);
-        bus.addListener(this::onFMLClientSetup);
+        modEventBus.addListener(this::onFMLCommonSetup);
+        modEventBus.addListener(this::onFMLClientSetup);
     }
     
     private void onFMLCommonSetup(final FMLCommonSetupEvent event) {
     }
     
+    @OnlyIn(Dist.CLIENT)
     private void onFMLClientSetup(final FMLClientSetupEvent event) {
         PortalLiveViewClientSetup.setupClient();
     }

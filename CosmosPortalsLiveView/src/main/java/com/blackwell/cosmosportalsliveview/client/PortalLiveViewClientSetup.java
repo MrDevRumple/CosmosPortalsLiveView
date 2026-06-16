@@ -1,8 +1,8 @@
 package com.blackwell.cosmosportalsliveview.client;
 
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.common.NeoForge;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
 
 import com.blackwell.cosmosportalsliveview.client.event.PortalRenderEventHandler;
 import com.blackwell.cosmosportalsliveview.client.event.PortalLifecycleListener;
@@ -12,8 +12,8 @@ import com.blackwell.cosmosportalsliveview.client.event.BlockEntityCleanupListen
 public class PortalLiveViewClientSetup {
     
     public static void setupClient() {
-        NeoForge.EVENT_BUS.register(PortalRenderEventHandler.class);
-        NeoForge.EVENT_BUS.register(PortalLifecycleListener.class);
-        NeoForge.EVENT_BUS.register(BlockEntityCleanupListener.class);
+        MinecraftForge.EVENT_BUS.register(PortalRenderEventHandler.class);
+        MinecraftForge.EVENT_BUS.register(PortalLifecycleListener.class);
+        MinecraftForge.EVENT_BUS.register(BlockEntityCleanupListener.class);
     }
 }

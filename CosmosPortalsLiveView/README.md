@@ -1,6 +1,6 @@
 # CosmosPortals Live View
 
-A Minecraft NeoForge addon mod for version 1.20.1 that adds live view portal rendering to [CosmosPortals](https://github.com/TheCosmosSeries/CosmosPortals).
+A Minecraft Forge addon mod for version 1.20.1 that adds live view portal rendering to [CosmosPortals](https://github.com/TheCosmosSeries/CosmosPortals).
 
 ## Features
 
@@ -37,7 +37,7 @@ portalsPerFrame = 1
 
 1. Download the mod jar
 2. Place in your `mods` folder
-3. Requires: NeoForge 20.1.91+, CosmosPortals 1.20.1+, CosmosLibrary 1.20.1+
+3. Requires: Forge 47.3.0+, CosmosPortals 1.20.1+, CosmosLibrary 1.20.1+
 
 ## How It Works
 
@@ -75,7 +75,7 @@ portalsPerFrame = 1
 ## Development
 
 Built with:
-- NeoForge 20.1.91
+- Forge 47.3.0
 - Minecraft 1.20.1
 - CosmosPortals 1.20.1
 

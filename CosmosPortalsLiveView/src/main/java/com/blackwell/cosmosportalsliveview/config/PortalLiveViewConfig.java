@@ -1,17 +1,17 @@
 package com.blackwell.cosmosportalsliveview.config;
 
-import net.neoforged.neoforge.common.ModConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec;
 
 public class PortalLiveViewConfig {
     
-    public static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
-    public static final ModConfigSpec SPEC;
+    public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
+    public static final ForgeConfigSpec SPEC;
     
-    public static final ModConfigSpec.BooleanValue ENABLE_LIVE_VIEW;
-    public static final ModConfigSpec.IntValue CAPTURE_RADIUS_CHUNKS;
-    public static final ModConfigSpec.IntValue CAPTURE_RESOLUTION;
-    public static final ModConfigSpec.IntValue CAPTURE_INTERVAL_MS;
-    public static final ModConfigSpec.IntValue PORTALS_PER_FRAME;
+    public static final ForgeConfigSpec.BooleanValue ENABLE_LIVE_VIEW;
+    public static final ForgeConfigSpec.IntValue CAPTURE_RADIUS_CHUNKS;
+    public static final ForgeConfigSpec.IntValue CAPTURE_RESOLUTION;
+    public static final ForgeConfigSpec.IntValue CAPTURE_INTERVAL_MS;
+    public static final ForgeConfigSpec.IntValue PORTALS_PER_FRAME;
     
     static {
         BUILDER.comment("CosmosPortals Live View Configuration").push("general");

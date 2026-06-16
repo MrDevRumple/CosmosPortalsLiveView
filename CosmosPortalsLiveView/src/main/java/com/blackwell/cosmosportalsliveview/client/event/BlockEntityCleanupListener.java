@@ -3,12 +3,12 @@ package com.blackwell.cosmosportalsliveview.client.event;
 import com.tcn.cosmosportals.core.blockentity.BlockEntityPortal;
 import com.blackwell.cosmosportalsliveview.client.renderer.PortalLiveViewManager;
 
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.event.level.ChunkEvent;
-import net.neoforged.neoforge.event.level.LevelEvent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.event.level.ChunkEvent;
+import net.minecraftforge.event.level.LevelEvent;
 
 @Mod.EventBusSubscriber(modid = "cosmosportals_liveview", bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 @OnlyIn(Dist.CLIENT)
@@ -16,7 +16,7 @@ public class BlockEntityCleanupListener {
     
     @SubscribeEvent
     public static void onChunkUnload(ChunkEvent.Unload event) {
-        if (event.isWorldGenerated() && event.getLevel().isClientSide) {
+        if (event.getLevel().isClientSide) {
             var chunk = event.getChunk();
             chunk.getBlockEntities().forEach((pos, entity) -> {
                 if (entity instanceof BlockEntityPortal) {
