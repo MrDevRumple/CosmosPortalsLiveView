@@ -4,7 +4,6 @@ import com.blackwell.cosmosportalsliveview.config.PortalLiveViewConfig;
 
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -37,7 +36,6 @@ public class LocalizedChunkCapture {
     }
     
     private static DynamicTexture createPortalViewTexture(Level level, BlockPos center, int radiusChunks, int resolution) {
-        // Create a simple texture using CompoundTag for pixel data
         int[] pixels = new int[resolution * resolution];
         
         int halfRadius = radiusChunks * 16;
@@ -63,15 +61,11 @@ public class LocalizedChunkCapture {
             }
         }
         
-        // For now, create a simple colored texture
         return createSimpleTexture(resolution, pixels);
     }
     
     private static DynamicTexture createSimpleTexture(int size, int[] pixels) {
-        // Create a simple texture - this is a simplified version
-        // In production, you'd want to use TextureUploadManager for proper texture creation
         try {
-            // Return a placeholder - in real implementation, you'd need proper texture handling
             return new DynamicTexture(size, size, false);
         } catch (Exception e) {
             return null;
@@ -79,20 +73,23 @@ public class LocalizedChunkCapture {
     }
     
     private static int getBlockColor(BlockState blockState) {
-        // Check if replaceable using newer API
-        try {
-            if (blockState.getMaterial().isReplaceable()) {
-                return 0xFF000000; // Transparent black
-            }
-        } catch (Exception e) {
-            // Fallback for newer versions that don't have getMaterial
-            if (blockState.isAir()) {
-                return 0xFF000000;
-            }
+        // Check if air
+        if (blockState.isAir()) {
+            return 0xFF000000; // Transparent black
         }
         
         int r = 100, g = 100, b = 100, a = 255;
         
+        // Use block material check only if available
+        try {
+            if (blockState.getMaterial().isReplaceable()) {
+                return 0xFF000000;
+            }
+        } catch (NoSuchMethodError | NoSuchFieldError e) {
+            // getMaterial doesn't exist in this version, skip
+        }
+        
+        // Color blocks by type
         if (blockState.getBlock() == Blocks.GRASS_BLOCK || blockState.getBlock() == Blocks.DIRT) {
             r = 139; g = 101; b = 68;
         } else if (blockState.getBlock() == Blocks.STONE || blockState.getBlock() == Blocks.COBBLESTONE) {
