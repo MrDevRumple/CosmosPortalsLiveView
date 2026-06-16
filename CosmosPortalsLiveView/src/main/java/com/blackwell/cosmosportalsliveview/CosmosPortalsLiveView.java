@@ -18,7 +18,23 @@ public class CosmosPortalsLiveView {
     public static final String MOD_ID = "cosmosportals_liveview";
     
     public CosmosPortalsLiveView() {
-        IEventBus modEventBus = ModLoadingContext.get().getActiveContainer().getEventBus();
+        IEventBus modEventBus = null;
+        try {
+            modEventBus = ModLoadingContext.get().getActiveContainer().getEventBus();
+        } catch (Exception e) {
+            try {
+                // Fallback for different Forge versions
+                modEventBus = ModLoadingContext.getInstance().getModEventBus();
+            } catch (Exception e2) {
+                // If this fails too, we'll handle it differently
+            }
+        }
+        
+        if (modEventBus == null) {
+            // Last resort fallback - use direct FML bus
+            modEventBus = ModLoadingContext.get().getEventBus();
+        }
+        
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, PortalLiveViewConfig.SPEC, "cosmosportals-liveview-client.toml");
         
         modEventBus.addListener(this::onFMLCommonSetup);

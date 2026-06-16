@@ -36,8 +36,6 @@ public class LocalizedChunkCapture {
     }
     
     private static DynamicTexture createPortalViewTexture(Level level, BlockPos center, int radiusChunks, int resolution) {
-        int[] pixels = new int[resolution * resolution];
-        
         int halfRadius = radiusChunks * 16;
         int minX = center.getX() - halfRadius;
         int minZ = center.getZ() - halfRadius;
@@ -55,16 +53,14 @@ public class LocalizedChunkCapture {
                 
                 BlockPos samplePos = new BlockPos(worldX, worldY, worldZ);
                 BlockState blockState = level.getBlockState(samplePos);
-                
-                int color = getBlockColor(blockState);
-                pixels[texY * resolution + texX] = color;
+                getBlockColor(blockState);
             }
         }
         
-        return createSimpleTexture(resolution, pixels);
+        return createSimpleTexture(resolution);
     }
     
-    private static DynamicTexture createSimpleTexture(int size, int[] pixels) {
+    private static DynamicTexture createSimpleTexture(int size) {
         try {
             return new DynamicTexture(size, size, false);
         } catch (Exception e) {
@@ -73,35 +69,30 @@ public class LocalizedChunkCapture {
     }
     
     private static int getBlockColor(BlockState blockState) {
-        // Check if air
+        // Simple block identification
         if (blockState.isAir()) {
-            return 0xFF000000; // Transparent black
+            return 0xFF000000;
         }
         
         int r = 100, g = 100, b = 100, a = 255;
         
-        // Use block material check only if available
-        try {
-            if (blockState.getMaterial().isReplaceable()) {
-                return 0xFF000000;
-            }
-        } catch (NoSuchMethodError | NoSuchFieldError e) {
-            // getMaterial doesn't exist in this version, skip
-        }
-        
         // Color blocks by type
-        if (blockState.getBlock() == Blocks.GRASS_BLOCK || blockState.getBlock() == Blocks.DIRT) {
-            r = 139; g = 101; b = 68;
-        } else if (blockState.getBlock() == Blocks.STONE || blockState.getBlock() == Blocks.COBBLESTONE) {
-            r = 128; g = 128; b = 128;
-        } else if (blockState.getBlock() == Blocks.OAK_LOG || blockState.getBlock() == Blocks.OAK_LEAVES) {
-            r = 139; g = 69; b = 19;
-        } else if (blockState.getBlock() == Blocks.WATER) {
-            r = 0; g = 100; b = 200;
-        } else if (blockState.getBlock() == Blocks.SAND) {
-            r = 238; g = 203; b = 139;
-        } else if (blockState.getBlock() == Blocks.SNOW) {
-            r = 255; g = 255; b = 255;
+        try {
+            if (blockState.getBlock() == Blocks.GRASS_BLOCK || blockState.getBlock() == Blocks.DIRT) {
+                r = 139; g = 101; b = 68;
+            } else if (blockState.getBlock() == Blocks.STONE || blockState.getBlock() == Blocks.COBBLESTONE) {
+                r = 128; g = 128; b = 128;
+            } else if (blockState.getBlock() == Blocks.OAK_LOG || blockState.getBlock() == Blocks.OAK_LEAVES) {
+                r = 139; g = 69; b = 19;
+            } else if (blockState.getBlock() == Blocks.WATER) {
+                r = 0; g = 100; b = 200;
+            } else if (blockState.getBlock() == Blocks.SAND) {
+                r = 238; g = 203; b = 139;
+            } else if (blockState.getBlock() == Blocks.SNOW) {
+                r = 255; g = 255; b = 255;
+            }
+        } catch (Exception e) {
+            // Fallback to default gray
         }
         
         return (a << 24) | (r << 16) | (g << 8) | b;
@@ -109,6 +100,10 @@ public class LocalizedChunkCapture {
     
     private static boolean canAccessDimension(ResourceLocation dimension, Level currentLevel) {
         if (currentLevel == null) return false;
-        return currentLevel.dimension().location().equals(dimension);
+        try {
+            return currentLevel.dimension().location().equals(dimension);
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
