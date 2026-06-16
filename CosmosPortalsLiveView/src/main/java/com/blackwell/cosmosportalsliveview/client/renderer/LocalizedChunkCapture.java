@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.NativeImage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.ClientLevel;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class LocalizedChunkCapture {
     
-    public static void captureLocalizedPortalView(PortalViewData portalData, ClientLevel level) {
+    public static void captureLocalizedPortalView(PortalViewData portalData, Level level) {
         if (portalData == null || level == null) return;
         
         BlockPos destPos = portalData.destPos;
@@ -36,8 +36,8 @@ public class LocalizedChunkCapture {
         }
     }
     
-    private static DynamicTexture createPortalViewTexture(ClientLevel level, BlockPos center, int radiusChunks, int resolution) {
-        NativeImage image = new NativeImage(NativeImage.Format.RGBA, resolution, resolution, false);
+    private static DynamicTexture createPortalViewTexture(Level level, BlockPos center, int radiusChunks, int resolution) {
+        NativeImage image = new NativeImage(resolution, resolution, false);
         
         int halfRadius = radiusChunks * 16;
         int minX = center.getX() - halfRadius;
@@ -89,7 +89,7 @@ public class LocalizedChunkCapture {
         return (r << 16) | (g << 8) | b | (a << 24);
     }
     
-    private static boolean canAccessDimension(ResourceLocation dimension, ClientLevel currentLevel) {
+    private static boolean canAccessDimension(ResourceLocation dimension, Level currentLevel) {
         if (currentLevel == null) return false;
         return currentLevel.dimension().location().equals(dimension);
     }

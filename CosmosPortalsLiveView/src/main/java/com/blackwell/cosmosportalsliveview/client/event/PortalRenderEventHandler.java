@@ -5,27 +5,28 @@ import com.blackwell.cosmosportalsliveview.client.renderer.PortalLiveViewManager
 import com.blackwell.cosmosportalsliveview.client.renderer.PortalViewData;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.ClientLevel;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
-import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraftforge.client.event.TickEvent;
+import com.mojang.math.Matrix4f;
 
 @Mod.EventBusSubscriber(modid = "cosmosportals_liveview", bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 @OnlyIn(Dist.CLIENT)
 public class PortalRenderEventHandler {
     
     @SubscribeEvent
-    public static void onClientTick(ScreenEvent.Init.Post event) {
+    public static void onClientTick(TickEvent.ClientTickEvent event) {
+        if (event.phase != TickEvent.Phase.END) return;
         if (!PortalLiveViewConfig.ENABLE_LIVE_VIEW.get()) return;
         
         Minecraft minecraft = Minecraft.getInstance();
@@ -54,8 +55,6 @@ public class PortalRenderEventHandler {
                 renderPortalWithTexture(poseStack, bufferSource, data, texture);
             }
         }
-        
-        bufferSource.endBatch();
     }
     
     private static void renderPortalWithTexture(PoseStack poseStack, MultiBufferSource bufferSource,
@@ -65,7 +64,7 @@ public class PortalRenderEventHandler {
         poseStack.pushPose();
         poseStack.translate(portalPos.getX() + 0.5, portalPos.getY() + 0.5, portalPos.getZ() + 0.5);
         
-        VertexConsumer consumer = bufferSource.getBuffer(RenderType.getSolid());
+        VertexConsumer consumer = bufferSource.getBuffer(RenderType.solid());
         Matrix4f matrix = poseStack.last().pose();
         
         consumer.vertex(matrix, -0.5F, -0.5F, 0.001F).color(255, 255, 255, 255).uv(0, 0).endVertex();

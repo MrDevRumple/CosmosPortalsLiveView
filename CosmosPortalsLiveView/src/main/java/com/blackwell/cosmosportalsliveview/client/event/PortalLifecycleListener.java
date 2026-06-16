@@ -16,7 +16,7 @@ import net.minecraftforge.event.level.BlockEvent;
 public class PortalLifecycleListener {
     
     @SubscribeEvent
-    public static void onBlockChange(BlockEvent.DestroyEvent event) {
+    public static void onBlockDestroy(BlockEvent.DestroyEvent event) {
         Block block = event.getState().getBlock();
         
         if (isCosmosPortalBlock(block)) {

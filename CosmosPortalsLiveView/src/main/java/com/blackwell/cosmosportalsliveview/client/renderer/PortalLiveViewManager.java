@@ -7,11 +7,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import com.tcn.cosmosportals.core.blockentity.BlockEntityPortal;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.ClientLevel;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -21,20 +19,17 @@ public class PortalLiveViewManager {
     private static final Map<ResourceLocation, Set<BlockPos>> dimensionPortals = new ConcurrentHashMap<>();
     private static final Queue<BlockPos> updateQueue = new ConcurrentLinkedQueue<>();
     
-    public static void addPortal(BlockEntityPortal entity) {
+    public static void addPortal(Object entity, BlockPos pos, ResourceLocation dim) {
         if (entity == null) return;
         
-        BlockPos pos = entity.getBlockPos();
-        ResourceLocation dim = entity.destDimension;
-        
-        PortalViewData data = new PortalViewData(entity);
+        PortalViewData data = new PortalViewData(entity, pos, dim);
         activePortals.put(pos, data);
         
         dimensionPortals.computeIfAbsent(dim, k -> ConcurrentHashMap.newKeySet()).add(pos);
         updateQueue.offer(pos);
     }
     
-    public static void updatePortalsIncremental(ClientLevel level, long captureInterval, int portalsPerFrame) {
+    public static void updatePortalsIncremental(Level level, long captureInterval, int portalsPerFrame) {
         int updated = 0;
         long currentTime = System.currentTimeMillis();
         

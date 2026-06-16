@@ -3,8 +3,6 @@ package com.blackwell.cosmosportalsliveview.client.renderer;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.tcn.cosmosportals.core.blockentity.BlockEntityPortal;
-
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -24,10 +22,10 @@ public class PortalViewData {
     private final Set<ChunkPos> cachedChunks = new HashSet<>();
     private boolean needsUpdate = true;
     
-    public PortalViewData(BlockEntityPortal entity) {
-        this.portalPos = entity.getBlockPos();
-        this.destDimension = entity.destDimension;
-        this.destPos = entity.getDestPos();
+    public PortalViewData(Object entity, BlockPos portalPos, ResourceLocation destDimension) {
+        this.portalPos = portalPos;
+        this.destDimension = destDimension;
+        this.destPos = BlockPos.ZERO;
         this.lastCaptureTime = 0;
     }
     

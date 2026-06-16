@@ -1,6 +1,5 @@
 package com.blackwell.cosmosportalsliveview.client.event;
 
-import com.tcn.cosmosportals.core.blockentity.BlockEntityPortal;
 import com.blackwell.cosmosportalsliveview.client.renderer.PortalLiveViewManager;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -16,19 +15,19 @@ public class BlockEntityCleanupListener {
     
     @SubscribeEvent
     public static void onChunkUnload(ChunkEvent.Unload event) {
-        if (event.getLevel().isClientSide) {
-            var chunk = event.getChunk();
-            chunk.getBlockEntities().forEach((pos, entity) -> {
-                if (entity instanceof BlockEntityPortal) {
-                    PortalLiveViewManager.removePortal(pos);
-                }
-            });
-        }
+        if (!event.getLevel().isClientSide()) return;
+        
+        var blockEntities = event.getChunk().getBlockEntities();
+        blockEntities.forEach((pos, entity) -> {
+            if (entity != null && entity.getClass().getSimpleName().contains("BlockEntityPortal")) {
+                PortalLiveViewManager.removePortal(pos);
+            }
+        });
     }
     
     @SubscribeEvent
     public static void onWorldUnload(LevelEvent.Unload event) {
-        if (event.getLevel().isClientSide) {
+        if (event.getLevel().isClientSide()) {
             PortalLiveViewManager.cleanup();
         }
     }
