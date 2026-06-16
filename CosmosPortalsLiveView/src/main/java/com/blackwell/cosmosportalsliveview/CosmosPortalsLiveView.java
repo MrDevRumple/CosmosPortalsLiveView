@@ -18,7 +18,7 @@ public class CosmosPortalsLiveView {
     public static final String MOD_ID = "cosmosportals_liveview";
     
     public CosmosPortalsLiveView() {
-        IEventBus modEventBus = ModLoadingContext.get().getModEventBus();
+        IEventBus modEventBus = ModLoadingContext.get().getActiveContainer().getEventBus();
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, PortalLiveViewConfig.SPEC, "cosmosportals-liveview-client.toml");
         
         modEventBus.addListener(this::onFMLCommonSetup);

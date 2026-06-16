@@ -17,8 +17,10 @@ public class BlockEntityCleanupListener {
     public static void onChunkUnload(ChunkEvent.Unload event) {
         if (!event.getLevel().isClientSide()) return;
         
-        var blockEntities = event.getChunk().getBlockEntities();
-        blockEntities.forEach((pos, entity) -> {
+        var blockEntities = event.getChunk().getBlockEntities().entrySet();
+        blockEntities.forEach(entry -> {
+            var pos = entry.getKey();
+            var entity = entry.getValue();
             if (entity != null && entity.getClass().getSimpleName().contains("BlockEntityPortal")) {
                 PortalLiveViewManager.removePortal(pos);
             }
